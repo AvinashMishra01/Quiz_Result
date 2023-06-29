@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<!-- <div class="background"> -->
+
+<nav class="navbar navbar-expand-lg navbar-primary bg-primary">
+  <div class="container-fluid">
+    <!-- <a class="navbar-brand" href="#">Navbar</a> -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav" style="justify-content: center;">
+        <a class="nav-link active" aria-current="page" (click)="add_User()">Add User</a>
+        <a class="nav-link active"  (click)="getAllUser()">Registered's User</a>
+        <a class="nav-link active"  (click)="userUnder21()">Required User</a>
+        <a class="nav-link" (click)="getWinnerList()">Winner</a>
+        <a class="nav-link" (click)="getTopperList()">Topper</a>
+
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="mainOCntent">
+<div *ngIf="addUser">
+  <div class="card">
+    <div class="card-body text-center ">
+    <h4><b>Add User</b></h4>
+     <div class="row">
+      <div class="col-1"></div>
+      <div class="col-10">
+        <span style="border-bottom: 1px black">
+          <hr style="border-top: 1px solid rgb(105 38 40)" />
+        </span>
+      </div>
+      <div class="col-1"></div>
+    </div>
+    <br>
+
+
+    <div class="row">
+      <div class="col-2 text-right">Name :- </div>
+      <div class="col-2 text-left"><input type="text" class="form-control" [(ngModel)]="userSaveObj['name']"> </div>
+      <div class="col-2 text-right">Age :- </div>
+      <div class="col-2 text-left"><input type="number" class="form-control" [(ngModel)]="userSaveObj['age']" > </div>
+      <div class="col-2 text-right">Score :- </div>
+      <div class="col-2 text-left"><input type="number" class="form-control" [(ngModel)]="userSaveObj['score']" > </div>
+    </div>
+   <br>
+   <div class="row-12 text-center"> <button type="button" class="btn btn-primary" (click)="saveUser()">Save</button></div>
+
+
+
+    </div>
+  </div>
+
+
+</div>
+
+
+<!-- User List -->
+<div *ngIf="addUser!=true">
+
+  <div class="card">
+
+    <div class="card-body text-center ">
+  <!-- material  -->
+  <br>
+   <b> {{headerData}}</b>
+   <div class="row">
+    <div class="col-1"></div>
+    <div class="col-10">
+      <span style="border-bottom: 1px black">
+        <hr style="border-top: 1px solid rgb(105 38 40)" />
+      </span>
+    </div>
+    <div class="col-1"></div>
+  </div>
+  <br>
+  <br>
+  <div class="row">
+    <div class="col-6 " style="text-align: left;">
+         <mat-form-field >
+            Filter :  <input matInput (keyup)="applyFilter1($event.target.value)"
+            placeholder="Filter">
+          </mat-form-field>
+           </div>
+            </div>
+<br>
+  <div class=" example-container ">
+    <table mat-table [dataSource]="dataSource1" matSort #sortCol2="matSort">
+        <ng-container matColumnDef="sr_no">
+            <th mat-header-cell *matHeaderCellDef class="left" mat-sort-header>Sr. No
+
+            </th>
+            <td mat-cell flex-stretch *matCellDef="let element; let i = index; "
+                class="right">
+                {{ i+1 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef class="right" mat-sort-header> Name </th>
+            <td mat-cell flex-stretch *matCellDef="let element" class="right">
+              <label> {{element.name}}</label>
+              </td>
+        </ng-container>
+        <ng-container matColumnDef="age">
+            <th mat-header-cell *matHeaderCellDef class="right" mat-sort-header> Age </th>
+            <td mat-cell flex-stretch *matCellDef="let element" class="right">
+              <label> {{element.age}}</label>
+              </td>
+        </ng-container>
+        <ng-container matColumnDef="score">
+            <th mat-header-cell *matHeaderCellDef class="right" mat-sort-header> Socre </th>
+            <td mat-cell flex-stretch *matCellDef="let element" class="right">
+              <label> {{element.score}}</label>
+              </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef class="right" mat-sort-header> Action </th>
+            <td mat-cell flex-stretch *matCellDef="let element" class="right">
+
+              <button *ngIf="userlist==true" type="button" class="btn btn-warning" (click)="winnewButton(element)" disabled>Regitration Done</button>
+              <!-- <button *ngIf="userlist==true" type="button" class="btn btn-primary" (click)="deleteButton(element)">Delete</button> &nbsp;&nbsp; -->
+              <button *ngIf="under21==true" type="button" class="btn btn-primary" (click)="winnewButton(element)">Add To Winner</button>
+              <button *ngIf="winnerlist==true" type="button" class="btn btn-warning" (click)="topperButton(element)" disabled> Score More Than 90</button>
+              <button  *ngIf="topperlist==true" type="button" class="btn btn-primary" disabled>Give Reward</button>
+
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+    </table>
+    <mat-paginator #paginator1  showFirstLastButtons>
+    </mat-paginator>
+</div>
+
+  <!-- // material end -->
+   </div>
+   </div>
+
+</div>
+
+
+</div>
+<!-- </div> -->
+</body>
+</html>
